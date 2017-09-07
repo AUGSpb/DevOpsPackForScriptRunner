@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.onresolve.scriptrunner.assets</groupId>
+    <artifactId>sr-sample-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <organization>
+        <name>Example Company</name>
+        <url>http://www.example.com/</url>
+    </organization>
+
+    <name>sr-dependent-plugin</name>
+    <description>This is a sample scripts plugin for use with Script Runner.</description>
+    <packaging>atlassian-plugin</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-core</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jira-plugin</artifactId>
+                <version>${amps.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <productVersion>${jira.version}</productVersion>
+                    <productDataVersion>${jira.version}</productDataVersion>
+                    
+					<!--
+						<jvmArgs>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000</jvmArgs>
+					-->
+
+                    <systemPropertyVariables>
+                        <atlassian.mail.senddisabled>false</atlassian.mail.senddisabled>
+                        <atlassian.dev.mode>false</atlassian.dev.mode>
+                        <plugin.script.roots>${project.basedir}/src/main/resources,${project.basedir}/src/test/resources</plugin.script.roots>
+                    </systemPropertyVariables>
+
+                    <pluginArtifacts>
+                        <pluginArtifact>
+							<groupId>com.onresolve.jira.groovy</groupId>
+							<artifactId>groovyrunner</artifactId>
+							<version>${scriptrunner.version}</version>
+                        </pluginArtifact>
+                        <pluginArtifact>
+                            <groupId>com.atlassian.jira.plugins</groupId>
+                            <artifactId>jira-greenhopper-plugin</artifactId>
+                            <version>6.6.0</version>
+                        </pluginArtifact>
+                    </pluginArtifacts>
+				</configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/resources</source>
+                                <source>src/test/resources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <jira.version>7.2.7</jira.version>
+        <amps.version>5.0.4</amps.version>
+        <plugin.testrunner.version>1.1.2</plugin.testrunner.version>
+		<!-- TestKit version 5.x for JIRA 5.x, 6.x for JIRA 6.x -->
+		<testkit.version>5.2.26</testkit.version>
+        <groovy.version>2.3.6</groovy.version>
+        <scriptrunner.version>3.0.10</scriptrunner.version>
+    </properties>
+
+</project>
